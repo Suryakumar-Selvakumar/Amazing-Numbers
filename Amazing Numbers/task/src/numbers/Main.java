@@ -1,5 +1,6 @@
 package numbers;
 
+import jumping.Jumping;
 import spy.Spy;
 import buzz.Buzz;
 import duck.Duck;
@@ -8,13 +9,24 @@ import palindrome.Palindrome;
 import sunny.Sunny;
 import square.Square;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
+import java.text.NumberFormat;
 
 public class Main {
-    public static boolean isProgramOn = true;
-    public static String[] properties = new String[]{"BUZZ", "DUCK", "PALINDROMIC", "GAPFUL", "SPY", "SQUARE", "SUNNY", "EVEN", "ODD"};
+    static boolean isProgramOn;
+    static String[] properties;
+    static ArrayList<String[]> mutuallyExclusiveProperties;
+    static NumberFormat formatter;
+
+    static {
+        isProgramOn = true;
+        properties = new String[]{"BUZZ", "DUCK", "PALINDROMIC", "GAPFUL", "SPY", "SQUARE", "SUNNY", "JUMPING", "EVEN", "ODD"};
+        mutuallyExclusiveProperties = new ArrayList<>();
+        mutuallyExclusiveProperties.add(new String[]{"ODD", "EVEN"});
+        mutuallyExclusiveProperties.add(new String[]{"DUCK", "SPY"});
+        mutuallyExclusiveProperties.add(new String[]{"SUNNY", "SQUARE"});
+        formatter = NumberFormat.getNumberInstance(Locale.US);
+    }
 
     public static void main(String[] args) {
 //        write your code here
@@ -40,7 +52,7 @@ public class Main {
 
             if (inputs.length == 1) {
                 System.out.printf("""
-                                       \nProperties of %d
+                                       \nProperties of %s
                                        buzz: %b
                                        duck: %b
                                 palindromic: %b
@@ -48,16 +60,18 @@ public class Main {
                                         spy: %b
                                      square: %b
                                       sunny: %b
+                                    jumping: %b
                                        even: %b
                                         odd: %b
                                 
-                                """, num, Buzz.isBuzz(num),
+                                """, formatter.format(num), Buzz.isBuzz(num),
                         Duck.isDuck(num),
                         Palindrome.isPalindrome(num),
                         Gapful.isGapful(num),
                         Spy.isSpy(num),
                         Square.isSquare(num),
                         Sunny.isSunny(num),
+                        Jumping.isJumping(num),
                         isEven(num),
                         isOdd(num));
                 continue;
@@ -69,54 +83,18 @@ public class Main {
             }
 
             if (inputs.length == 2) {
-                processNumbers(num, count, null, null);
+                processNumbers(num, count, null);
                 continue;
             }
 
-            String propertyFilter1 = processPropertyParameter(inputs[2]);
+            ArrayList<String> propertyFilters = new ArrayList<>(Arrays.stream(Arrays.copyOfRange(inputs, 2, inputs.length)).toList());
+            String processingResult = processMultipleProperties(propertyFilters);
 
-            if (inputs.length == 3) {
-                if (propertyFilter1.equals("WRONG")) {
-                    printErrorMessage(inputs[2], null);
-                    continue;
-                }
-                processNumbers(num, count, propertyFilter1, null);
+            if (processingResult.equals("WRONG") || processingResult.equals("MUTUALLY_EXCLUSIVE")) {
                 continue;
             }
 
-            String propertyFilter2 = processPropertyParameter(inputs[3]);
-
-            if (propertyFilter1.equals("WRONG") && propertyFilter2.equals("WRONG")) {
-                printErrorMessage(inputs[2], inputs[3]);
-                continue;
-            }
-
-            if (propertyFilter1.equals("WRONG")) {
-                printErrorMessage(inputs[2], null);
-                continue;
-            }
-
-            if (propertyFilter2.equals("WRONG")) {
-                printErrorMessage(inputs[3], null);
-                continue;
-            }
-
-            String processingResult = processMultipleProperties(propertyFilter1, propertyFilter2);
-            if (processingResult.equals("MUTUALLY_EXCLUSIVE")) {
-                System.out.printf("""
-                        \nThe request contains mutually exclusive properties: [%s, %s]
-                        There are no numbers with these properties.
-                        
-                        """, propertyFilter1, propertyFilter2);
-                continue;
-            }
-
-            if (processingResult.equals("EQUAL")) {
-                processNumbers(num, count, propertyFilter1, null);
-                continue;
-            }
-
-            processNumbers(num, count, propertyFilter1, propertyFilter2);
+            processNumbers(num, count, propertyFilters);
         }
     }
 
@@ -172,48 +150,56 @@ public class Main {
         return count;
     }
 
-    public static String processPropertyParameter(String input) {
+    public static boolean doesPropertyExist(String input) {
         input = input.toUpperCase();
 
-        if (Arrays.stream(properties).noneMatch(input::equals)) {
+        return Arrays.asList(properties).contains(input);
+    }
+
+    public static String processMultipleProperties(ArrayList<String> propertyFilters) {
+        ArrayList<String> wrongProperties = new ArrayList<>();
+
+        for (int i = 0; i < propertyFilters.size(); i++) {
+            propertyFilters.set(i, propertyFilters.get(i).toUpperCase()); // Convert case to upper
+
+            // Add wrong ones to wrongProperties
+            if (!doesPropertyExist(propertyFilters.get(i))) {
+                wrongProperties.add(propertyFilters.get(i));
+            }
+        }
+
+        // Wrong properties check
+        if (!wrongProperties.isEmpty()) {
+            printErrorMessage(wrongProperties, "WRONG");
             return "WRONG";
         }
 
-        return input;
-    }
+        // Remove Equal properties
+        Set<String> seen = new HashSet<>();
+        propertyFilters.removeIf(e -> !seen.add(e));
 
-    public static String processMultipleProperties(String property1, String property2) {
-        if (property1.equals(property2)) {
-            return "EQUAL";
+        // Mutually Exclusive properties check
+        for (String[] combination : mutuallyExclusiveProperties) {
+            if (propertyFilters.containsAll(Arrays.asList(combination))) {
+                printErrorMessage(new ArrayList<>(Arrays.asList(combination)), "MUTUALLY_EXCLUSIVE");
+                return "MUTUALLY_EXCLUSIVE";
+            }
         }
 
-        String combination = property1 + "_" + property2;
-
-        return switch (combination) {
-            case "ODD_EVEN", "EVEN_ODD", "DUCK_SPY", "SPY_DUCK", "SUNNY_SQUARE", "SQUARE_SUNNY" -> "MUTUALLY_EXCLUSIVE";
-            default -> "";
-        };
-
+        return "OKAY";
     }
 
-    public static void processNumbers(long num, int count, String propertyFilter1, String propertyFilter2) {
+    public static void processNumbers(long num, int count, ArrayList<String> propertyFilters) {
         System.out.println();
 
         int i = 0;
         while (i < count) {
-            if (propertyFilter2 != null && propertyFilter1 != null &&
-                    (!containsFilterProperty(num, propertyFilter1) ||
-                            !containsFilterProperty(num, propertyFilter2))) {
+            if (propertyFilters != null && !satisfiesFilters(num, propertyFilters)) {
                 num++;
                 continue;
             }
 
-            if (propertyFilter1 != null && !containsFilterProperty(num, propertyFilter1)) {
-                num++;
-                continue;
-            }
-
-            String numIs = String.format("%" + 16 + "s is", num);
+            String numIs = String.format("%" + 16 + "s is", formatter.format(num));
             ArrayList<String> numProperties = new ArrayList<>(Arrays.asList(properties));
 
             if (!isEven(num)) {
@@ -252,6 +238,10 @@ public class Main {
                 numProperties.remove("SQUARE");
             }
 
+            if (!Jumping.isJumping(num)) {
+                numProperties.remove("JUMPING");
+            }
+
             System.out.printf("%s %s\n", numIs, String.join(", ", numProperties).toLowerCase());
             num++;
             i++;
@@ -260,8 +250,8 @@ public class Main {
         System.out.println();
     }
 
-    static boolean containsFilterProperty(long num, String property) {
-        return switch (property) {
+    static boolean satisfiesFilters(long num, ArrayList<String> propertyFilters) {
+        return propertyFilters.stream().allMatch((property -> switch (property) {
             case "ODD" -> isOdd(num);
             case "EVEN" -> isEven(num);
             case "BUZZ" -> Buzz.isBuzz(num);
@@ -271,38 +261,38 @@ public class Main {
             case "SPY" -> Spy.isSpy(num);
             case "SQUARE" -> Square.isSquare(num);
             case "SUNNY" -> Sunny.isSunny(num);
+            case "JUMPING" -> Jumping.isJumping(num);
             default -> false;
-        };
+        }));
     }
 
     public static void printInstructions() {
         System.out.println("""
                 \nSupported requests:
-                  - enter a natural number to know its properties;\s
+                  - enter a natural number to know its properties;
                   - enter two natural numbers to obtain the properties of the list:
                     * the first parameter represents a starting number;
                     * the second parameter shows how many consecutive numbers are to be printed;
-                  - two natural numbers and a property to search for;
-                  - two natural numbers and two properties to search for;
+                  - two natural numbers and properties to search for;
                   - separate the parameters with one space;
                   - enter 0 to exit.
                 """);
     }
 
-    public static void printErrorMessage(String property1, String property2) {
-        if (property2 == null) {
+    public static void printErrorMessage(ArrayList<String> wrongProperties, String error) {
+        if (error.equals("MUTUALLY_EXCLUSIVE")) {
             System.out.printf("""
-                    \nThe property [%s] is wrong.
-                    Available properties: %s
+                    \nThe request contains mutually exclusive properties: %s
+                    There are no numbers with these properties.
                     
-                    """, property1.toUpperCase(), Arrays.toString(properties));
+                    """, wrongProperties.toString());
             return;
         }
 
         System.out.printf("""
-                \nThe property [%s, %s] are wrong.
+                \nThe property %s %s wrong.
                 Available properties: %s
                 
-                """, property1.toUpperCase(), property2.toUpperCase(), Arrays.toString(properties));
+                """, wrongProperties.toString(), wrongProperties.size() > 1 ? "are" : "is", Arrays.toString(properties));
     }
 }

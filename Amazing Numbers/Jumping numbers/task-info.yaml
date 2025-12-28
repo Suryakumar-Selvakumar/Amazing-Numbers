@@ -48,9 +48,50 @@ files:
   - name: src/spy/Spy.java
     visible: true
     learner_created: false
-  - name: src/jumping/Jumping.java
-    visible: true
-    learner_created: true
 feedback_link: https://hyperskill.org/projects/184/stages/937/implement#comment
-status: Unchecked
+status: Failed
+feedback:
+  message: |-
+    Wrong answer in test #41
+
+    For the number 23,232 the expected number of properties is 3 but the actual number of properties is 4. Expected properties are [gapful, palindromic, even]. Actual properties are [palindromic, gapful, jumping, even]
+
+    Please find below the output of your program during this failed test.
+    Note that the &#39;&gt;&#39; character indicates the beginning of the input line.
+
+    ---
+
+    Welcome to Amazing Numbers!
+
+    Supported requests:
+      - enter a natural number to know its properties;
+      - enter two natural numbers to obtain the properties of the list:
+        * the first parameter represents a starting number;
+        * the second parameter shows how many consecutive numbers are to be printed;
+      - two natural numbers and properties to search for;
+      - separate the parameters with one space;
+      - enter 0 to exit.
+
+    Enter a request: &gt; 22604 17 PALINDROMIC
+
+              22,622 is palindromic, even
+              22,722 is buzz, palindromic, even
+              22,822 is palindromic, even
+              22,922 is palindromic, even
+              23,032 is duck, palindromic, even
+              23,132 is palindromic, even
+              23,232 is palindromic, gapful, jumping, even
+              23,332 is palindromic, even
+              23,432 is palindromic, jumping, even
+              23,532 is palindromic, even
+              23,632 is buzz, palindromic, even
+              23,732 is palindromic, even
+              23,832 is palindromic, even
+              23,932 is palindromic, even
+              24,042 is duck, palindromic, even
+              24,142 is palindromic, even
+              24,242 is palindromic, even
+
+    Enter a request:
+  time: "Sun, 28 Dec 2025 21:37:50 UTC"
 record: 7

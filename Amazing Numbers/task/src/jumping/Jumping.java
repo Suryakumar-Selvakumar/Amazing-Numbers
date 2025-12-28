@@ -2,18 +2,22 @@ package jumping;
 
 import spy.Spy;
 
-class Jumping {
+public class Jumping {
     public static boolean isJumping(long num) {
         int[] digits = Spy.getDigits(num);
 
-        boolean diffGreaterThanOne = false;
+        if (digits.length <= 3) {
+            return false;
+        }
+
+        boolean diffNotOne = false;
         for (int i = 1; i < digits.length; i++) {
-            if (Math.abs(digits[i] - digits[i - 1]) > 1) {
-                diffGreaterThanOne = true;
+            if (Math.abs(digits[i] - digits[i - 1]) != 1) {
+                diffNotOne = true;
                 break;
             }
         }
 
-        return diffGreaterThanOne || digits.length == 1;
+        return !diffNotOne;
     }
 }
