@@ -1,0 +1,56 @@
+type: edu
+files:
+  - name: src/numbers/Main.java
+    visible: true
+    learner_created: false
+  - name: src/buzz/Buzz.java
+    visible: true
+    learner_created: false
+  - name: src/duck/Duck.java
+    visible: true
+    learner_created: false
+  - name: src/palindrome/Palindrome.java
+    visible: true
+    learner_created: false
+  - name: src/gapful/Gapful.java
+    visible: true
+    learner_created: false
+  - name: test/util/Checker.java
+    visible: true
+    learner_created: false
+  - name: test/util/LinesChecker.java
+    visible: true
+    learner_created: false
+  - name: test/util/RegexChecker.java
+    visible: true
+    learner_created: false
+  - name: test/util/TextChecker.java
+    visible: true
+    learner_created: false
+  - name: test/util/UserProgram.java
+    visible: true
+    learner_created: false
+  - name: test/ListChecker.java
+    visible: true
+    learner_created: false
+  - name: test/NumberProperty.java
+    visible: true
+    learner_created: false
+  - name: test/NumbersTest.java
+    visible: true
+    learner_created: false
+  - name: test/PropertiesChecker.java
+    visible: true
+    learner_created: false
+  - name: test/Request.java
+    visible: true
+    learner_created: false
+  - name: src/spy/Spy.java
+    visible: true
+    learner_created: false
+  - name: src/jumping/Jumping.java
+    visible: true
+    learner_created: true
+feedback_link: https://hyperskill.org/projects/184/stages/937/implement#comment
+status: Unchecked
+record: 7
