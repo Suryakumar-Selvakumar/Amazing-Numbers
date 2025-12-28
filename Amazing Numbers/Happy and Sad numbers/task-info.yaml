@@ -33,6 +33,27 @@ files:
   - name: test/Request.java
     visible: true
     learner_created: false
+  - name: src/gapful/Gapful.java
+    visible: true
+    learner_created: true
+  - name: src/spy/Spy.java
+    visible: true
+    learner_created: true
+  - name: src/buzz/Buzz.java
+    visible: true
+    learner_created: true
+  - name: src/duck/Duck.java
+    visible: true
+    learner_created: true
+  - name: src/palindrome/Palindrome.java
+    visible: true
+    learner_created: true
+  - name: src/happy/Happy.java
+    visible: true
+    learner_created: true
+  - name: src/sad/Sad.java
+    visible: true
+    learner_created: true
 feedback_link: https://hyperskill.org/projects/184/stages/938/implement#comment
 status: Unchecked
 record: -1

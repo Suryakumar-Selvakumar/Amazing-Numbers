@@ -1,6 +1,8 @@
 package numbers;
 
+import happy.Happy;
 import jumping.Jumping;
+import sad.Sad;
 import spy.Spy;
 import buzz.Buzz;
 import duck.Duck;
@@ -20,7 +22,7 @@ public class Main {
 
     static {
         isProgramOn = true;
-        properties = new String[]{"BUZZ", "DUCK", "PALINDROMIC", "GAPFUL", "SPY", "SQUARE", "SUNNY", "JUMPING", "EVEN", "ODD"};
+        properties = new String[]{"BUZZ", "DUCK", "PALINDROMIC", "GAPFUL", "SPY", "SQUARE", "SUNNY", "JUMPING", "HAPPY", "SAD", "EVEN", "ODD"};
         mutuallyExclusiveProperties = new ArrayList<>();
         mutuallyExclusiveProperties.add(new String[]{"ODD", "EVEN"});
         mutuallyExclusiveProperties.add(new String[]{"DUCK", "SPY"});
@@ -61,6 +63,8 @@ public class Main {
                                      square: %b
                                       sunny: %b
                                     jumping: %b
+                                      happy: %b
+                                        sad: %b
                                        even: %b
                                         odd: %b
                                 
@@ -72,6 +76,8 @@ public class Main {
                         Square.isSquare(num),
                         Sunny.isSunny(num),
                         Jumping.isJumping(num),
+                        Happy.isHappy(num),
+                        Sad.isSad(num),
                         isEven(num),
                         isOdd(num));
                 continue;
@@ -240,6 +246,14 @@ public class Main {
 
             if (!Jumping.isJumping(num)) {
                 numProperties.remove("JUMPING");
+            }
+
+            if (!Happy.isHappy(num)) {
+                numProperties.remove("HAPPY");
+            }
+
+            if (!Sad.isSad(num)) {
+                numProperties.remove("SAD");
             }
 
             System.out.printf("%s %s\n", numIs, String.join(", ", numProperties).toLowerCase());

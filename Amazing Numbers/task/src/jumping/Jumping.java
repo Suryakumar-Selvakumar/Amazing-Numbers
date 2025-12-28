@@ -6,7 +6,7 @@ public class Jumping {
     public static boolean isJumping(long num) {
         int[] digits = Spy.getDigits(num);
 
-        if (digits.length <= 3) {
+        if (digits.length <= 5) {
             return false;
         }
 
