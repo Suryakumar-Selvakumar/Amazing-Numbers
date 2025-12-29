@@ -8,11 +8,6 @@ import java.util.Set;
 
 public class Happy {
     public static boolean isHappy(long num) {
-
-        if (num < 7) {
-            return false;
-        }
-
         Set<Integer> seen = new HashSet<>();
 
         int[] digits;
