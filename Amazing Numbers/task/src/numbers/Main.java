@@ -25,8 +25,15 @@ public class Main {
         properties = new String[]{"BUZZ", "DUCK", "PALINDROMIC", "GAPFUL", "SPY", "SQUARE", "SUNNY", "JUMPING", "HAPPY", "SAD", "EVEN", "ODD"};
         mutuallyExclusiveProperties = new ArrayList<>();
         mutuallyExclusiveProperties.add(new String[]{"ODD", "EVEN"});
+        mutuallyExclusiveProperties.add(new String[]{"-ODD", "-EVEN"});
         mutuallyExclusiveProperties.add(new String[]{"DUCK", "SPY"});
+        mutuallyExclusiveProperties.add(new String[]{"-DUCK", "-SPY"});
         mutuallyExclusiveProperties.add(new String[]{"SUNNY", "SQUARE"});
+        mutuallyExclusiveProperties.add(new String[]{"HAPPY", "SAD"});
+        mutuallyExclusiveProperties.add(new String[]{"-HAPPY", "-SAD"});
+        Arrays.stream(properties).forEach(property -> {
+            mutuallyExclusiveProperties.add(new String[]{property, "-" + property});
+        });
         formatter = NumberFormat.getNumberInstance(Locale.US);
     }
 
@@ -157,7 +164,7 @@ public class Main {
     }
 
     public static boolean doesPropertyExist(String input) {
-        input = input.toUpperCase();
+        input = input.toUpperCase().replace("-", "");
 
         return Arrays.asList(properties).contains(input);
     }
@@ -276,6 +283,16 @@ public class Main {
             case "SQUARE" -> Square.isSquare(num);
             case "SUNNY" -> Sunny.isSunny(num);
             case "JUMPING" -> Jumping.isJumping(num);
+            case "-ODD" -> !isOdd(num);
+            case "-EVEN" -> !isEven(num);
+            case "-BUZZ" -> !Buzz.isBuzz(num);
+            case "-PALINDROMIC" -> !Palindrome.isPalindrome(num);
+            case "-DUCK" -> !Duck.isDuck(num);
+            case "-GAPFUL" -> !Gapful.isGapful(num);
+            case "-SPY" -> !Spy.isSpy(num);
+            case "-SQUARE" -> !Square.isSquare(num);
+            case "-SUNNY" -> !Sunny.isSunny(num);
+            case "-JUMPING" -> !Jumping.isJumping(num);
             default -> false;
         }));
     }
@@ -286,8 +303,9 @@ public class Main {
                   - enter a natural number to know its properties;
                   - enter two natural numbers to obtain the properties of the list:
                     * the first parameter represents a starting number;
-                    * the second parameter shows how many consecutive numbers are to be printed;
+                    * the second parameter shows how many consecutive numbers are to be processed;
                   - two natural numbers and properties to search for;
+                  - a property preceded by minus must not be present in numbers;
                   - separate the parameters with one space;
                   - enter 0 to exit.
                 """);

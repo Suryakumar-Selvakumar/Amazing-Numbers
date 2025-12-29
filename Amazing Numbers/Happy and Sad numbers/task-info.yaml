@@ -55,5 +55,48 @@ files:
     visible: true
     learner_created: true
 feedback_link: https://hyperskill.org/projects/184/stages/938/implement#comment
-status: Unchecked
+status: Failed
+feedback:
+  message: |-
+    Wrong answer in test #18
+
+    For the number 7 the expected number of properties is 4 but the actual number of properties is 5. Expected properties are [palindromic, spy, buzz, odd]. Actual properties are [buzz, palindromic, spy, happy, odd]
+
+    Please find below the output of your program during this failed test.
+    Note that the &#39;&gt;&#39; character indicates the beginning of the input line.
+
+    ---
+
+    Welcome to Amazing Numbers!
+
+    Supported requests:
+      - enter a natural number to know its properties;
+      - enter two natural numbers to obtain the properties of the list:
+        * the first parameter represents a starting number;
+        * the second parameter shows how many consecutive numbers are to be processed;
+      - two natural numbers and properties to search for;
+      - a property preceded by minus must not be present in numbers;
+      - separate the parameters with one space;
+      - enter 0 to exit.
+
+    Enter a request: &gt; 1 15
+
+                   1 is palindromic, spy, square, odd
+                   2 is palindromic, spy, even
+                   3 is palindromic, spy, sunny, odd
+                   4 is palindromic, spy, square, even
+                   5 is palindromic, spy, odd
+                   6 is palindromic, spy, even
+                   7 is buzz, palindromic, spy, happy, odd
+                   8 is palindromic, spy, sunny, sad, even
+                   9 is palindromic, spy, square, sad, odd
+                  10 is duck, happy, even
+                  11 is palindromic, sad, odd
+                  12 is sad, even
+                  13 is happy, odd
+                  14 is buzz, sad, even
+                  15 is sunny, sad, odd
+
+    Enter a request:
+  time: "Mon, 29 Dec 2025 01:57:49 UTC"
 record: -1
